@@ -1,0 +1,133 @@
+{%extends 'cart/base.html'%}
+{%block title%}cust prodview page{%endblock%}
+{%block css%}
+.container{
+background-color:ghostwhite;
+margin:20px auto;
+}
+.replyreply{
+background-color:black;
+color:white;
+width:80%;
+margin:0 auto;
+border-radius:17px
+}
+form{
+display:flex;
+}
+#headcomment{
+margin:2px 15px
+}
+form textarea{
+margin:20px auto;
+padding:0 20px;
+width:80%;
+height:55px
+}
+#btn1{
+height: 50px;
+margin: 24px 23px;
+width: 100px;
+padding: 0 15px;
+}
+#reply{
+margin:10px 160px;
+background-color:grey
+}
+{%endblock%}
+{%block body%}
+{%load humanize%}
+{%load extras%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-4">
+    <img src="/media/{{obj.image}}" height="280px" width="330px" class="m-3">
+    </div>
+        <div class="col-md-6 col-lg-8">
+            <h3>{{obj.title}}</h3>
+            <p>{{obj.content}} <small><b> {{obj.category}}</b></small></p>
+            <small>{{obj.timstamp|naturaltime}}</small>
+        </div>
+    </div>
+    <form action="/cart/review/" method="post">{%csrf_token%}
+    <input type="hidden" value="{{obj.id}}" name="product">
+        <input type="hidden" name="replyid" value="">
+
+        <textarea class="form-control" rows="3" name="review" placeholder="write your comment" required></textarea>
+
+        <input type="submit" value="submit" id="btn1" class="btn-btn primary">
+</form>
+</div>
+{%if not review.count < 1 %}
+<div class="containers" id="reply">
+    <h1 id="headcomment">{{review.count}} reviews<!--{%if review.count < 1  %}review{%else%}reviews{%endif%}--></h1>
+    <hr>
+    <div class="row">
+    {%for i in review%}
+    <div class="col-md-4 col-lg-12" >
+        <p style="margin:0px 12px">{{i.content}}<a href="/cart/deletecomment/{{i.id}}?object={{obj.id}}"><input type="submit" value="delete"></a></p>
+
+<hr>
+       <div class="reply mx-0">
+  <div class="reply">
+
+  <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#replybox{{i.id}}" aria-expanded="false"
+          aria-controls="replybox{{i.id}}" style="margin:10px 15px">
+    reply
+  </button>
+
+<div class="collapse" id="replybox{{i.id}}">
+  <div class="card card-body">
+
+   <form action="/cart/review/" method="post">{%csrf_token%}
+
+                <h5>Replies</h5>
+                <div class="form-group">
+                <input type ="text" class="form-control" name="replytxt" placeholder="Add a public reply" required>
+                </div>
+                 <input type="hidden" name="product" value="{{obj.id}}">
+                <input type="hidden" name="replyid" value="{{i.id}}">
+                <div class="form-group">
+                <button type="submit" class="btn btn-success" >reply</button>
+              </div>
+            </form>
+
+  </div>
+
+  </div>
+</div>
+<div class="replyreply">
+           {%for i in reply|get_def:i.id%}
+    <p style="margin:0 100px"> {{i}} </p><span><a href="/cart/deletereply/{{i.id}}?productid={{obj.id}}" > |Delete</a></span></p>
+           <hr>
+           {%endfor%}
+</div>
+</div>
+        </div>
+
+    {%endfor%}
+
+</div>
+
+</div>
+{%endif%}
+<div class="container">
+{%if not user.is_authenticated%}
+    <h1>suggested for you</h1>
+    <div class="row">
+        {%for i in cat%}
+        <div class="col-md-4 col-lg-4">
+            <div class="card" style="width: 18rem;">
+  <img src="/media/{{i.image}}" class="card-img-top" height="280px" width="330px" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{i.title}}</h5>
+      <p class="card-text">{{i.content|truncatechars:100}}<small><a href="/cart/readmore/{{i.id}}">read more</a></small>  <i> {{i.category}}</i></p>
+
+  </div>
+</div>
+        </div>
+        {%endfor%}
+    </div>
+{%endif%}
+</div>
+{%endblock%}

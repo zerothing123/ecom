@@ -1,0 +1,11 @@
+{%extends 'cart/base.html'%}
+{%block title%}login page{%endblock%}
+{%block body%}
+<h1>Login here</h1>
+<form action="/cart/index/" method="post" >{%csrf_token%}
+    <input type="text" name="name" placeholder="name">
+    <input type="password" name="password" placeholder="Password">
+    <a href="/cart/signup/">new user<small> Signup here</small></a>
+    <input type="submit" value="LogIn" class="btn">
+</form>
+{%endblock%}

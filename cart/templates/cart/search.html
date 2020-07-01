@@ -1,0 +1,37 @@
+{%extends 'cart/base.html'%}
+{%block title%}search page{%endblock%}
+{%block body%}
+{%load humanize%}
+<div class="container">
+    <div class="row">
+{%if product%}
+{%for i in product%}
+<div class="col-md-6 col-lg-4">
+    <img src="/media/{{i.image}}" height="280px" width="330px" class="m-3">
+    </div>
+        <div class="col-md-6 col-lg-8">
+            <h3 id="namepr{{i.id}}">{{i.title}}</h3>
+            <p>{{i.content|truncatechars:600}}{%if not user.is_authenticated%}<a href="/cart/readmore/{{i.id}}"><i> Read more</i></a>{%else%}<a href="/cart/view/{{i.id}}"><i> Read more</i></a>{%endif%}<small><b> {{i.category}}</b></small></p>
+            <small>{{i.timstamp|naturaltime}} </small>
+            {%if not user.is_authenticated%}
+            <span id="divpr{{i.id}}" class="divpr">
+                <button type="submit" class="btn btn-warning cart" id="pr{{i.id}}"> add to cart</button>
+            </span>
+            {%endif%}
+            <p id="pricepr{{i.id}}">{{i.price}}</p>
+            <p id="userpr{{i.id}}">{{i.name}}</p>
+        </div>
+{%endfor%}
+        {%else%}
+        <h1>No search results</h1><br>
+<p>your search <b>{{obj1}}</b> does not match anything</p>
+sugestions:
+<ul><li>try different keyword</li>
+    <li>keyword cannot be more than 78 char</li>
+    <li>keyword has to be something related to title</li>
+</ul>
+{%endif%}
+
+    </div>
+</div>
+{%endblock%}

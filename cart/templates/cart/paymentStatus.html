@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{response}}
+<h1>payment status regarding your order is {{response.ORDERID}}</h1>
+{%if response.RESPCODE == '01'%}
+<h3>order sucessfull</h3>
+{%else%}
+<h1>order failiur</h1>
+{%endif%}
+</body>
+</html>

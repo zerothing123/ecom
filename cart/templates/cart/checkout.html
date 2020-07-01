@@ -1,0 +1,97 @@
+{%extends 'cart/base.html'%}
+{%block title%}Checkout page {%endblock%}
+{%block body%}
+<div class="container">
+    <h1>Your items here</h1>
+    <div class="items">
+<ul class="list-group" id="item">
+
+</ul>
+        <span id="totalPrices"></span>
+        <hr>
+    </div>
+    <div class="details">
+        <h2>submit your details</h2>
+    <form action="/cart/checkout/" method="POST">{%csrf_token%}
+        <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="name" >
+  </div>
+        <input type="hidden" name="itemjson" id="itemjson">
+        <input type="hidden" name="newtag" id="amount">
+  <div class="form-group">
+    <label for="email">Email address</label>
+    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+  </div>
+        <div class="form-group">
+    <label for="phone">Phone</label>
+    <input type="number" class="form-control" id="phone" name="phone" placeholder="phone number +91...." required>
+  </div>
+        <div class="form-group">
+    <label for="adress">Adresss</label>
+    <textarea class="form-control" id="adress" name="adress" rows="3" required></textarea>
+  </div>
+        <div class="form-group">
+            <button class="btn btn-success">submit</button>
+
+
+
+
+  </div>
+</form>
+    </div>
+</div>
+
+
+{%endblock%}
+
+{%block js%}
+
+<script>
+if(localStorage.getItem('cart')==null)
+{
+cart={}
+}
+else{
+cart=JSON.parse(localStorage.getItem('cart'))
+}
+console.log(cart)
+var sum=0
+if ($.isEmptyObject(cart)){
+mystr="go and add items don waste our time";
+  $('#item').append(mystr);
+}
+else{
+sum=0
+totalprice=0
+for (i in cart){
+let name=cart[i][1]
+let qty=cart[i][0]
+let price=cart[i][2]
+sum=sum+qty
+totalprice = totalprice+qty*price
+mystr=`<li class="list-group-item d-flex justify-content-between align-items-center">
+    ${name}
+
+    <span class="badge badge-primary badge-pill">${qty} and ${price}</span>
+  </li>`
+  if(qty > 0){
+  $('#item').append(mystr)
+  }
+
+}
+document.getElementById('totalPrices').innerHTML=totalprice
+document.getElementById('carts').innerHTML=sum;
+}
+$('#testname').val(cart[i][3])
+$('#itemjson').val(JSON.stringify(cart))
+
+{%if thanks%}
+alert('thanks for ordering with us.. your order id id {{id}} use it to track your order ')
+localStorage.clear()
+document.location='/cart/allprod'
+{%endif%}
+$('#amount').val($('#totalPrices').html())
+
+</script>
+{%endblock%}

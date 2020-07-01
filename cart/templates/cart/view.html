@@ -1,0 +1,68 @@
+{%extends 'cart/base.html'%}
+{%block title%}view page{%endblock%}
+{%block css%}
+.container{
+background-color:ghostwhite;
+margin:20px auto;
+}
+.container-reply{
+background-color:brown;
+border:solid black 3px;
+border-radius:12px;
+color:white;
+
+}
+.div-reply{
+margin:10px 100px;
+border:solid black 1px;
+border-radius:17px;
+background-color:red;
+color:white;
+padding:6px 15px;
+max-width:2250px
+}
+.div-comment{
+margin:10px 5px;
+padding:6px 15px;
+border:solid black 2px;
+border-radius:13px;
+
+}
+{%endblock%}
+{%block body%}
+{%load humanize%}
+{%load extras%}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-lg-4">
+    <img src="/media/{{obj1.image}}" height="280px" width="330px" class="m-3">
+    </div>
+        <div class="col-md-6 col-lg-8">
+            <h3>{{obj1.title}}</h3>
+            <p>{{obj1.content}}<small><b> {{obj1.category}}</b></small></p>
+            <small>{{obj1.timstamp|naturaltime}}</small>
+        </div>
+    </div>
+    {%if not review.count < 1 %}
+    <h4 style="margin:3px 12px">{{review.count}} reviews</h4>
+    <div class="container-reply">
+
+    {%for i in review%}
+    <p class="div-comment">{{i.content}}</p>
+    {%for i in reply|get_def:i.id%}
+    <p class="div-reply">{{i}}</p>
+    {%endfor%}
+{%endfor%}
+    </div>
+    {%endif%}
+
+
+
+
+
+
+
+</div>
+{%endblock%}
